@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Parcel Sandbox</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="clock">
+        <h1 class="clock__view js-clock"></h1>
+      </div>
+      <div class="name">
+        <div class="name__no-save">
+          <h3>What is your name?</h3>
+          <form class="name__form">
+            <input
+              type="text"
+              placeholder="Input your name."
+              class="input__name js-name-input"
+            />
+          </form>
+        </div>
+        <div class="name__saved">
+          <h3 class="name__greet js-greet"></h3>
+        </div>
+      </div>
+      <div class="todo">
+        <form action="" class="todo__form js-form">
+          <input
+            type="text"
+            placeholder="write a to do"
+            class="js-todo-input"
+          />
+        </form>
+        <ul class="todo-list js-todolist"></ul>
+      </div>
+    </div>
+    <div class="background"></div>
+    <script src="src/index.js"></script>
+  </body>
+</html>

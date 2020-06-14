@@ -14,9 +14,12 @@ const todoBox = document.querySelector(".todo"),
   todoInput = todoForm.querySelector(".js-todo-input");
 const todoUl = document.querySelector(".js-todolist");
 const bgImage = document.querySelector(".background");
+const weather = document.querySelector(".weather");
 
 const NAME = "NAME";
 const TASK_LIST = "TASKS";
+const API_KEY = "4c04a3f247bafd4fd704bebe68d27172";
+const COORDS = "coords";
 
 let tasks = [];
 
@@ -138,6 +141,58 @@ function loadBackground() {
   bgImage.appendChild(randImage);
 }
 
+function getWeather(lat, lon) {
+  //api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={your api key}
+  fetch(
+    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+  )
+    .then((response) => {
+      return response.json();
+    })
+    .then((json) => {
+      const {
+        name,
+        main: { temp },
+      } = json;
+      weather.innerText = `${temp} @ ${name}`;
+    });
+}
+
+function saveCoords(coordsObj) {
+  funcLS.setLocalStorageObj(COORDS, coordsObj);
+}
+
+function handleGeoSuccess(position) {
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
+  const coordsObj = {
+    latitude,
+    longitude,
+  };
+
+  saveCoords(coordsObj);
+  getWeather(latitude, longitude);
+}
+
+function handleGeoError() {
+  console.log("Cant access geo location");
+}
+
+function askForCoords() {
+  navigator.geolocation.getCurrentPosition(handleGeoSuccess, handleGeoError);
+}
+
+function loadWeather() {
+  const loadedCoords = funcLS.getLocalStorage(COORDS);
+
+  if (loadedCoords === null) {
+    askForCoords();
+  } else {
+    const position = funcLS.getLocalStorageObj(COORDS);
+    getWeather(position.latitude, position.longitude);
+  }
+}
+
 function init() {
   //Time
   setInterval(loadTime, 1000);
@@ -152,5 +207,8 @@ function init() {
 
   //Bacground
   loadBackground();
+
+  //Weather
+  loadWeather();
 }
 init();

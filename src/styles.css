@@ -31,6 +31,10 @@ html {
   z-index: -1;
 }
 
+.clock__view {
+  font-size: 40px;
+}
+
 .weather {
   margin-top: 30px;
 }

@@ -3,20 +3,16 @@
   1. 새창으로 열린 경우
     - window.opener != null
     - document.referrer == ''
-    - window.history.lengh == 1
   2. 화면 이동으로 열린 경우
     - window.opener == null
     - document.referrer != ''
-    - window.history.lengh > 1
   3. url 링크를 타거나 qr-code를 타고 브라우저 팝업으로 열린 경우
     - window.opener == null
     - document.referrer == ''
-    - window.history.lengh == 1
 */
 function closeWindow() {
   var isPopup = !!window.opener;
   var isNavigation = document.referrer !== "";
-  var isNoHistory = window.history.length <= 1;
 
   if (isFromApp) {
     if (isNavigation) {
@@ -31,12 +27,19 @@ function closeWindow() {
       //새창으로 열린 경우는 창 닫기로 동작
       window.close();
     } else {
-      if (isNavigation || !isNoHistory) {
+      if (isNavigation) {
         //화면이동으로 접근한 경우 뒤로가기
         window.history.back();
       } else {
         //url 링크를 타거나 qr-code를 타고 브라우저 팝업으로 열린 경우
         window.close();
+
+        //창이 닫히지 않았다면 메인화면으로 이동(닫기동작 수행 불가)
+        setTimeout(function () {
+          if (!window.closed) {
+            window.location.href = "/main/main/CPMNMN0101.hc";
+          }
+        }, 100);
       }
     }
   }
